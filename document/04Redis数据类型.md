@@ -115,3 +115,161 @@ Http://redisdoc.com/
   简单一句话，先get然后立即set
 
   ![04-11](resources/04-11.png)
+
+
+## Redis列表(List)
+
+### 常用
+
+![04-12](resources/04-12.png)
+
+### 单值多value
+
+### 案例
+
+* lpush/rpush/lrange
+
+* lpop/rpop
+
+  ![04-13](resources/04-13.png)
+
+* lindex，按照索引下标获得元素(从上到下)
+
+  通过索引获取列表中的元素 lindex key index
+
+  ![04-14](resources/04-14.png)
+
+* llen
+
+* lrem key 删N个value
+
+  从left往right删除2个值等于v1的元素，返回的值为实际删除的数量
+
+  LREM list3 0 值，表示删除全部给定的值。零个就是全部值
+
+  ![04-15](resources/04-15.png)
+
+* ltrim key 开始index 结束index，截取指定范围的值后再赋值给key
+
+  ltrim：截取指定索引区间的元素，格式是ltrim list的key 起始索引 结束索引
+
+  ![04-16](resources/04-16.png)
+
+* rpoplpush 源列表 目的列表
+
+  移除列表的最后一个元素，并将该元素添加到另一个列表并返回
+
+  ![04-17](resources/04-17.png)
+
+* lset key index value
+
+  ![04-18](resources/04-18.png)
+
+* linsert key  before/after 值1 值2
+
+  在list某个已有值的前后再添加具体值
+
+  ![04-19](resources/04-19.png)
+
+
+### 性能总结
+
+* 它是一个字符串链表，left、right都可以插入添加；
+* 如果键不存在，创建新的链表；
+* 如果键已存在，新增内容；
+* 如果值全移除，对应的键也就消失了。
+* 链表的操作无论是头和尾效率都极高，但假如是对中间元素进行操作，效率就很惨淡了。
+
+
+## Redis集合(Set)
+
+![04-20](resources/04-20.png)
+
+### 常用
+
+![04-21](resources/04-21.png)
+
+### 单值多value
+
+### 案例
+
+* sadd/smembers/sismember
+
+  ![04-22](resources/04-22.png)
+
+* scard，获取集合里面的元素个数
+
+  ![04-23](resources/04-23.png)
+
+* srem key value 删除集合中元素
+
+  ![04-24](resources/04-24.png)
+
+* srandmember key 某个整数(随机出几个数)
+
+  * 从set集合里面随机取出2个
+  * 如果超过最大数量就全部取出，
+  * 如果写的值是负数，比如-3 ，表示需要取出3个，但是可能会有重复值。
+
+  ![04-25](resources/04-25.png)
+
+* spop key 随机出栈
+
+  ![04-26](resources/04-26.png)
+
+* smove key1 key2 在key1里某个值      作用是将key1里的某个值赋给key2
+
+  ![04-27](resources/04-27.png)
+
+* 数学集合类
+  * 差集：sdiff
+
+    在第一个set里面而不在后面任何一个set里面的项
+
+    ![04-28](resources/04-28.png)
+
+  * 交集：sinter
+
+    ![04-29](resources/04-29.png)
+
+  * 并集：sunion
+
+    ![04-30](resources/04-30.png)
+
+
+## Redis哈希(Hash)
+
+![04-31](resources/04-31.png)
+
+### 常用
+
+### KV模式不变，但V是一个键值对
+
+### 案例
+
+* hset/hget/hmset/hmget/hgetall/hdel
+
+  ![04-32](resources/04-32.png)
+
+  ![04-33](resources/04-33.png)
+
+* hlen
+
+* hexists key 在key里面的某个值的key
+
+* hkeys/hvals
+
+  ![04-34](resources/04-34.png)
+
+* hincrby/hincrbyfloat
+
+  ![04-35](resources/04-35.png)
+
+* hsetnx
+
+  不存在赋值，存在了无效。
+
+  ![04-36](resources/04-36.png)
+
+
+
