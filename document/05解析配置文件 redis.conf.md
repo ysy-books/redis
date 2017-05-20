@@ -2,14 +2,10 @@
 
 ## Units单位
 
-![05-01](resources/05-01.png)
-
 1. 配置大小单位,开头定义了一些基本的度量单位，只支持bytes，不支持bit
 2. 对大小写不敏感
 
 ## INCLUDES包含
-
-![05-02](resources/05-02.png)
 
 和我们的Struts2配置文件类似，可以通过includes包含，redis.conf可以作为总闸，包含其他
 

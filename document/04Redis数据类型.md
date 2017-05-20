@@ -1,8 +1,8 @@
 # Redis数据类型
 
-## Redis的五大数据类型
+## 1. Redis的五大数据类型
 
-### String（字符串）
+**String（字符串）**
 
 string是redis最基本的类型，你可以理解成与Memcached一模一样的类型，一个key对应一个value。
 
@@ -10,134 +10,141 @@ string类型是二进制安全的。意思是redis的string可以包含任何数
 
 string类型是Redis最基本的数据类型，一个redis中字符串value最多可以是512M
 
-### Hash（哈希，类似java里的Map）
+**Hash（哈希，类似java里的Map）**
 
 Redis hash 是一个键值对集合。
 Redis hash是一个string类型的field和value的映射表，hash特别适合用于存储对象。
 
 类似Java里面的Map<String,Object>
 
-### List（列表）
+**List（列表）**
 
 Redis 列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素导列表的头部（左边）或者尾部（右边）。
 它的底层实际是个链表
 
-### Set（集合）
+**Set（集合）**
 
 Redis的Set是string类型的无序集合。它是通过HashTable实现实现的，
 
-### Zset(sorted set：有序集合)
+**Zset(sorted set：有序集合)**
 
 Redis zset 和 set 一样也是string类型元素的集合,且不允许重复的成员。
 不同的是每个元素都会关联一个double类型的分数。
 redis正是通过分数来为集合中的成员进行从小到大的排序。zset的成员是唯一的,但分数(score)却可以重复。
 
-### 哪里去获得redis常见数据类型操作命令
+**哪里去获得redis常见数据类型操作命令**
+
 Http://redisdoc.com/
 
 
-## Redis 键(key)
+## 2. Redis 键(key)
 
-### 常用
+### 2.1 常用
 
-![04-01](resources/04-01.png)
+`del key` 删除key
 
-### 案例
+`dump key` 序列化 key，并返回被序列化的值
 
-* keys *
+`exists key` 是否存在 key
 
-* exists key的名字，判断某个key是否存在
+`expire key seconds` 设置过期时间
 
-* move key db   --->当前库就没有了，被移除了
+`expireat key timestamp` 设置过期时间 参数时间戳
 
-* expire key 秒钟：为给定的key设置过期时间
+`pexpire key milliseconds`
 
-* ttl key 查看还有多少秒过期，-1表示永不过期，-2表示已过期
+`pexpireat key milliseconds-timestamp`
 
-* type key 查看你的key是什么类型
+`keys pattern` 查找符合模式的 key
 
-## Redis字符串(String)
+`move key db` 将当前数据库的 key 移动到给定的数据库 db 中
 
-![04-02](resources/04-02.png)
+`persist key` 移动 key 的过期时间，key 将持久保持
 
-### 常用
+`ttl key` 剩余过期时间
 
-![04-03](resources/04-03.png)
+`randomkey` 从当前数据库中随机返回一个 key
 
-### 单值单value
+`rename key newkey` 修改 key 的名称
 
-### 案例
+`renamenx key newkey` 仅当newkey 不存在时，将 key 改名为 newkey
 
-* set/get/del/append/strlen
-
-* Incr/decr/incrby/decrby,一定要是数字才能进行加减
-
-* getrange/setrange
-
-  getrange:获取指定区间范围内的值，类似between......and的关系
-  从零到负一表示全部
-
-  ![04-04](resources/04-04.png)
-
-  setrange设置指定区间范围内的值，格式是setrange key值 具体值
-
-  ![04-05](resources/04-05.png)
-
-* setex(set with expire)键秒值/setnx(set if not exist)
-
-  setex:设置带过期时间的key，动态设置。
-
-  setex 键 秒值 真实值
-
-  ![04-06](resources/04-06.png)
-
-  setnx:只有在 key 不存在时设置 key 的值。
-
-  ![04-07](resources/04-07.png)
-
-* mset/mget/msetnx
-
-  mset:同时设置一个或多个 key-value 对。
-
-  ![04-08](resources/04-08.png)
-
-  mget:获取所有(一个或多个)给定 key 的值。
-
-  ![04-09](resources/04-09.png)
-
-  msetnx:同时设置一个或多个 key-value 对，当且仅当所有给定 key 都不存在。
-
-  ![04-10](resources/04-10.png)
-
-* getset(先get再set)
-
-  getset:将给定 key 的值设为 value ，并返回 key 的旧值(old value)。
-  简单一句话，先get然后立即set
-
-  ![04-11](resources/04-11.png)
+`type key` 返回 key 所存储的值的类型
 
 
-## Redis列表(List)
+## 3. Redis字符串(String)
 
-### 常用
+### 3.1 常用
 
-![04-12](resources/04-12.png)
+`set key value` 设置指定 key 的值
 
-### 单值多value
+`get key` 获取指定 key 的值
 
-### 案例
+`getrange key start end` 返回 key 中字符串值的子字符
+
+`getset key value` 将给定 key 的值设置为 value，并返回 key 的旧值
+
+`getbit key offset` 对 key 所存储的字符串值，获取指定偏移量上的位（bit）
+
+`mget key1 [key2...]` 获取一个或多个值
+
+`setbit key offset value` 对 key 所存储的字符串值，设置或清除指定偏移量上的位（bit）
+
+`setex key seconds value` 设置值并设置过期时间
+
+`setnx key value` 当 key 不存在时设置 key 的值
+
+`setrange key offset value` 用 value 参数覆写给定 key 所存储的字符串，
+从偏移量 offset 开始
+
+`strlen key key` 字符串值的长度
+
+`mset key value [key value...]` 同时设置多个 key 值
+
+`msetnx key value [key value...]` 当所有 key 都不存在时，同时设置多个 key 值
+
+`psetex key milliseonds value` 设置过期时间 毫秒
+
+`Incr/decr/incrby/decrby` 一定要是数字才能进行加减
+
+
+## 4. Redis列表(List)
+
+### 4.1 常用
+
+`blpop key1 [key2] timeout` 移出并获取列表中的第一个元素，如果列表没有元素会阻塞列表
+直到等待超时或发现可弹出元素为止
+
+`brpop key1 [key2] timeout` 移出并获取列表中的最后一个元素，如果列表没有元素会阻塞列表
+直到等待超时或发现可弹出元素为止
+
+`brpoplpush source destination timout` 从列表中弹出一个值，将弹出的元素插入到
+另一个列表中并返回它；如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止
+
+`lindex key index` 通过索引获取列表中的元素
+
+`linsert key before|after pivot value` 在列表的元素前或后插入元素
+
+`llen key` 获取列表长度
+
+`lpop key` 移出并获取列表的第一个元素
+
+`lpush key value1 [value2]` 将一个或多个值插入到列表头部
+
+`lpushx key value` 将一个或多个值插入到已存在的列表头部
+
+`lrange key start stop` 获取指定范围内的元素
+
+
+### 4.2 案例
 
 * lpush/rpush/lrange
 
 * lpop/rpop
 
-  ![04-13](resources/04-13.png)
-
 * lindex，按照索引下标获得元素(从上到下)
 
   通过索引获取列表中的元素 lindex key index
-
-  ![04-14](resources/04-14.png)
 
 * llen
 
@@ -147,32 +154,22 @@ Http://redisdoc.com/
 
   LREM list3 0 值，表示删除全部给定的值。零个就是全部值
 
-  ![04-15](resources/04-15.png)
-
 * ltrim key 开始index 结束index，截取指定范围的值后再赋值给key
 
   ltrim：截取指定索引区间的元素，格式是ltrim list的key 起始索引 结束索引
-
-  ![04-16](resources/04-16.png)
 
 * rpoplpush 源列表 目的列表
 
   移除列表的最后一个元素，并将该元素添加到另一个列表并返回
 
-  ![04-17](resources/04-17.png)
-
 * lset key index value
-
-  ![04-18](resources/04-18.png)
 
 * linsert key  before/after 值1 值2
 
   在list某个已有值的前后再添加具体值
 
-  ![04-19](resources/04-19.png)
 
-
-### 性能总结
+### 4.3 性能总结
 
 * 它是一个字符串链表，left、right都可以插入添加；
 * 如果键不存在，创建新的链表；
@@ -181,29 +178,48 @@ Http://redisdoc.com/
 * 链表的操作无论是头和尾效率都极高，但假如是对中间元素进行操作，效率就很惨淡了。
 
 
-## Redis集合(Set)
+## 5. Redis集合(Set)
 
-![04-20](resources/04-20.png)
+### 5.1 常用
 
-### 常用
+`sadd key member1 [member2]` 向集合添加一个或多个成员
 
-![04-21](resources/04-21.png)
+`scard key` 获取集合的成员数
 
-### 单值多value
+`sdiff key1 [key2]` 返回给定所有集合的差集
 
-### 案例
+`sdiffstore destination key1 [key2]` 返回给定集合的差集并存储在 destination 中
+
+`sinter key1 [key2]` 返回给定所有集合的交集
+
+`sinterstore destination key1 [key2]` 返回给定集合的交集并存储在 destination 中
+
+`sismember key member` 判断 member 元素是否是集合 key 的成员
+
+`smembers key` 返回集合中的所有成员
+
+`smove source destination member` 将 member 元素从 source 集合移动到 destination 集合
+
+`spop key` 移除并返回集合中的一个随机元素
+
+`srandmember key [count]` 返回集合中一个或多个随机数
+
+`srem key member1 [member2]` 移除集合中一个或多个成员
+
+`sunion key1 [key2]` 返回所有给定集合的并集
+
+`sunionstore destination key1 [key2]` 所有给定集合的并集存储到 destination 集合中
+
+`sscan key cursor [MATCH pattern][Count count]` 迭代集合中的元素
+
+
+### 5.2 案例
 
 * sadd/smembers/sismember
 
-  ![04-22](resources/04-22.png)
-
 * scard，获取集合里面的元素个数
 
-  ![04-23](resources/04-23.png)
-
 * srem key value 删除集合中元素
-
-  ![04-24](resources/04-24.png)
 
 * srandmember key 某个整数(随机出几个数)
 
@@ -211,47 +227,22 @@ Http://redisdoc.com/
   * 如果超过最大数量就全部取出，
   * 如果写的值是负数，比如-3 ，表示需要取出3个，但是可能会有重复值。
 
-  ![04-25](resources/04-25.png)
-
 * spop key 随机出栈
 
-  ![04-26](resources/04-26.png)
-
 * smove key1 key2 在key1里某个值      作用是将key1里的某个值赋给key2
-
-  ![04-27](resources/04-27.png)
 
 * 数学集合类
   * 差集：sdiff
 
     在第一个set里面而不在后面任何一个set里面的项
 
-    ![04-28](resources/04-28.png)
-
   * 交集：sinter
-
-    ![04-29](resources/04-29.png)
 
   * 并集：sunion
 
-    ![04-30](resources/04-30.png)
-
-
-## Redis哈希(Hash)
-
-![04-31](resources/04-31.png)
-
-### 常用
-
-### KV模式不变，但V是一个键值对
-
-### 案例
+## 6. Redis哈希(Hash)
 
 * hset/hget/hmset/hmget/hgetall/hdel
-
-  ![04-32](resources/04-32.png)
-
-  ![04-33](resources/04-33.png)
 
 * hlen
 
@@ -259,17 +250,11 @@ Http://redisdoc.com/
 
 * hkeys/hvals
 
-  ![04-34](resources/04-34.png)
-
 * hincrby/hincrbyfloat
-
-  ![04-35](resources/04-35.png)
 
 * hsetnx
 
   不存在赋值，存在了无效。
-
-  ![04-36](resources/04-36.png)
 
 
 
